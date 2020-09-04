@@ -133,18 +133,32 @@ function init() {
 
 	console.log("human", human);
 
-
-
 }
 
-// Create Dino Compare Method 1
+// Create Dino Compare Method 1: Comparing weight
 // NOTE: Weight in JSON file is in lbs, height in inches.
+Dino.prototype.compareWeight = function(yourWeight){
+	const diff = this.weight - yourWeight;
+	return diff > 0 ? `${species} is ${diff} lbs heavier than you !!` : `${species} is ${-diff} lbs lighter than you !!`
+}
 
-// Create Dino Compare Method 2
-// NOTE: Weight in JSON file is in lbs, height in inches.
+// Create Dino Compare Method 2:  Comparing height
+Dino.prototype.compareHeight = function(yourHeight){
+	const diff = this.height - yourHeight;
+	return diff > 0 ? `${species} is ${diff} lbs longer than you !!` : `${species} is ${-diff} lbs shorter than you !!`
+}
 
-// Create Dino Compare Method 3
-// NOTE: Weight in JSON file is in lbs, height in inches.
+
+// Create Dino Compare Method 3 : Comparing diet
+Dino.prototype.compareDiet= function(yourDiet){
+	if(this.diet.toLowerCase() === "omnivor" && this.diet.toLowerCase() === "carnivor"){
+		return `${species} can eat you !!`
+	}
+
+	if(this.diet.toLowerCase() === "herbavor"){
+		return `${species} is safe for you !!`
+	}
+}
 
 // Generate Tiles for each Dino in Array
 
