@@ -10,7 +10,7 @@ function Dino(species, weight, height, diet, where, when, fact) {
 	this.fact = fact;
 
 	this.sayHello = function () {
-		console.log("Hello");
+		// console.log("Hello");
 	};
 }
 
@@ -18,7 +18,7 @@ function Dino(species, weight, height, diet, where, when, fact) {
 // NOTE: Weight in JSON file is in lbs, height in inches.
 Dino.prototype.compareWeight = function (yourWeight) {
 	const diff = Math.trunc(this.weight - yourWeight);
-	console.log("weight Diff", diff)
+	// console.log("weight Diff", diff)
 	return diff > 0
 		? `${this.species} was ${diff} lbs heavier than you !!`
 		: `${this.species} was ${-diff} lbs lighter than you !!`;
@@ -27,7 +27,7 @@ Dino.prototype.compareWeight = function (yourWeight) {
 // Create Dino Compare Method 2:  Comparing height
 Dino.prototype.compareHeight = function (yourHeight) {
 	const diff = Math.trunc(this.height - yourHeight);
-	console.log("height Diff", diff)
+	// console.log("height Diff", diff)
 
 	return diff > 0
 		? `${this.species} was ${diff} lbs longer than you !!`
@@ -124,7 +124,7 @@ const dinoData = [
 	},
 ];
 
-console.log("dinoData", dinoData);
+// console.log("dinoData", dinoData);
 
 function init() {
 	// Create Dino Objects
@@ -141,7 +141,7 @@ function init() {
 			)
 	);
 
-	console.log("dinoObjects ", dinoObjects);
+	// console.log("dinoObjects ", dinoObjects);
 
 	// Create Human Object
 	const human = new Dino(
@@ -167,7 +167,7 @@ function init() {
 		human.diet = diet;
 	})();
 
-	console.log("human", human);
+	// console.log("human", human);
 
 	if(!validateInput(human.name,human.height,human.weight)){
 		alert("All fields mandetory")
@@ -199,7 +199,7 @@ function init() {
 			fact.innerHTML = (_=> {
 				let result = "";
 				// Generate random number to choose fact from switch
-				const randomise = Math.floor(Math.random() * 7);
+				const randomise = getRandomInt(8);
 
 				switch (randomise) {
 					case 1:
@@ -232,7 +232,7 @@ function init() {
 		return documentFragment;
 	});
 
-	console.log("tiles", tiles)
+	// console.log("tiles", tiles)
 
 	// Add tiles to DOM
 	const grid = document.getElementById("grid");
@@ -242,11 +242,15 @@ function init() {
 	document.getElementById('dino-compare').innerHTML = "";
 }
 
-// Imput validator
+// Input validator
 const validateInput=(name, height, weight)=>{
 	return name.length && height.length && weight.length
 }
 
+// Get random number from 1 to max
+function getRandomInt(max) {
+  return 1 + Math.floor(Math.random() * Math.floor(max));
+}
 
 // On button click, prepare and display infographic
 const submitBtn = document.querySelector("#btn");
