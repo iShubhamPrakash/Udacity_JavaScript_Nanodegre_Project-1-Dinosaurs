@@ -17,18 +17,21 @@ function Dino(species, weight, height, diet, where, when, fact) {
 // Create Dino Compare Method 1: Comparing weight
 // NOTE: Weight in JSON file is in lbs, height in inches.
 Dino.prototype.compareWeight = function (yourWeight) {
-	const diff = this.weight - yourWeight;
+	const diff = Math.trunc(this.weight - yourWeight);
+	console.log("weight Diff", diff)
 	return diff > 0
-		? `${species} is ${diff} lbs heavier than you !!`
-		: `${species} is ${-diff} lbs lighter than you !!`;
+		? `${this.species} was ${diff} lbs heavier than you !!`
+		: `${this.species} was ${-diff} lbs lighter than you !!`;
 };
 
 // Create Dino Compare Method 2:  Comparing height
 Dino.prototype.compareHeight = function (yourHeight) {
-	const diff = this.height - yourHeight;
+	const diff = Math.trunc(this.height - yourHeight);
+	console.log("height Diff", diff)
+
 	return diff > 0
-		? `${species} is ${diff} lbs longer than you !!`
-		: `${species} is ${-diff} lbs shorter than you !!`;
+		? `${this.species} was ${diff} lbs longer than you !!`
+		: `${this.species} was ${-diff} lbs shorter than you !!`;
 };
 
 // Create Dino Compare Method 3 : Comparing diet
@@ -142,7 +145,7 @@ function init() {
 
 	// Create Human Object
 	const human = new Dino(
-		"Human",
+		"human",
 		60,
 		5.5,
 		"omnivore",
@@ -153,17 +156,26 @@ function init() {
 
 	// Use IIFE to get human data from form
 	(function getHumanData() {
-		human.name = document.getElementById("name").value;
-		human.weight = document.getElementById("weight").value;
-		human.height =
-			document.getElementById("feet").value +
-			document.getElementById("inches").value / 12;
-		human.diet = document.getElementById("diet").value.toLowerCase();
+		const name = document.getElementById("name").value;
+		const weight = document.getElementById("weight").value;
+		const height = document.getElementById("feet").value +
+		document.getElementById("inches").value / 12;
+		const diet = document.getElementById("diet").value.toLowerCase();
+		human.name = name;
+		human.weight = weight;
+		human.height = height
+		human.diet = diet;
 	})();
 
 	console.log("human", human);
-	// Push human object in dinoObjects
-	dinoObjects.push(human);
+
+	if(!validateInput(human.name,human.height,human.weight)){
+		alert("All fields mandetory")
+		return
+	}
+
+	// Add human object at 4th index in dinoObjects array
+	dinoObjects.splice(4,0,human);
 
 	// Generate Tiles for each Dino in Array
 	const tiles = dinoObjects.map((dino) => {
@@ -184,20 +196,20 @@ function init() {
 			fact.innerHTML = dino.fact;
 		} else {
 			title.innerHTML = dino.species;
-			fact.innerHTML = (_) => {
+			fact.innerHTML = (_=> {
 				let result = "";
 				// Generate random number to choose fact from switch
 				const randomise = Math.floor(Math.random() * 7);
 
 				switch (randomise) {
 					case 1:
-						result = dino.compareHeight();
+						result = dino.compareHeight(human.height);
 						break;
 					case 2:
-						result = dino.compareWeight();
+						result = dino.compareWeight(human.weight);
 						break;
 					case 3:
-						result = dino.compareDiet();
+						result = dino.compareDiet(human.diet);
 						break;
 					case 4:
 						result = `The ${dino.species} lived in what is now ${dino.where}.`;
@@ -210,22 +222,31 @@ function init() {
 						break;
 				}
 				return result;
-			};
+			})();
 		}
 		containerDiv.appendChild(title);
 		containerDiv.appendChild(img);
 		containerDiv.appendChild(fact);
 		documentFragment.appendChild(containerDiv);
-		
+
 		return documentFragment;
 	});
 
 	console.log("tiles", tiles)
 
 	// Add tiles to DOM
-
+	const grid = document.getElementById("grid");
+	tiles.forEach(tile=>grid.appendChild(tile))
+	
 	// Remove form from screen
+	document.getElementById('dino-compare').innerHTML = "";
 }
+
+// Imput validator
+const validateInput=(name, height, weight)=>{
+	return name.length && height.length && weight.length
+}
+
 
 // On button click, prepare and display infographic
 const submitBtn = document.querySelector("#btn");
