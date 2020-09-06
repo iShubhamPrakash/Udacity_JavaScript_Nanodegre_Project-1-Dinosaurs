@@ -128,7 +128,7 @@ function init() {
 		human.height =
 			document.getElementById("feet").value +
 			document.getElementById("inches").value / 12;
-		human.diet = document.getElementById("diet").value;
+		human.diet = document.getElementById("diet").value.toLowerCase();
 	})();
 
 	console.log("human", human);
@@ -151,12 +151,14 @@ Dino.prototype.compareHeight = function(yourHeight){
 
 // Create Dino Compare Method 3 : Comparing diet
 Dino.prototype.compareDiet= function(yourDiet){
-	if(this.diet.toLowerCase() === "omnivor" && this.diet.toLowerCase() === "carnivor"){
-		return `${species} can eat you !!`
-	}
-
-	if(this.diet.toLowerCase() === "herbavor"){
-		return `${species} is safe for you !!`
+	if (yourDiet === this.diet){
+		return `${this.species} is a ${this.diet}. You two can share your meal.`;
+	} else if (this.diet === "carnivor"){
+			return `${this.species} is a ${this.diet}. You can become its meal.`;
+	} else if (this.diet === "herbavor"){
+			return `${this.species} is a ${this.diet}. Find it some extra salad for dinner.`;
+	} else {
+			return `${this.species} is a ${this.diet}. Time to suggest a potluck.`;
 	}
 }
 
