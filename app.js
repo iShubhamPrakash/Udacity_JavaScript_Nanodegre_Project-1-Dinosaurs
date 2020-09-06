@@ -9,10 +9,40 @@ function Dino(species, weight, height, diet, where, when, fact) {
 	this.when = when;
 	this.fact = fact;
 
-	this.sayHello = function(){
-		console.log("Hello")
-	}
+	this.sayHello = function () {
+		console.log("Hello");
+	};
 }
+
+// Create Dino Compare Method 1: Comparing weight
+// NOTE: Weight in JSON file is in lbs, height in inches.
+Dino.prototype.compareWeight = function (yourWeight) {
+	const diff = this.weight - yourWeight;
+	return diff > 0
+		? `${species} is ${diff} lbs heavier than you !!`
+		: `${species} is ${-diff} lbs lighter than you !!`;
+};
+
+// Create Dino Compare Method 2:  Comparing height
+Dino.prototype.compareHeight = function (yourHeight) {
+	const diff = this.height - yourHeight;
+	return diff > 0
+		? `${species} is ${diff} lbs longer than you !!`
+		: `${species} is ${-diff} lbs shorter than you !!`;
+};
+
+// Create Dino Compare Method 3 : Comparing diet
+Dino.prototype.compareDiet = function (yourDiet) {
+	if (yourDiet === this.diet) {
+		return `${this.species} is a ${this.diet}. You two can share your meal.`;
+	} else if (this.diet === "carnivor") {
+		return `${this.species} is a ${this.diet}. You can become its meal.`;
+	} else if (this.diet === "herbavor") {
+		return `${this.species} is a ${this.diet}. Find it some extra salad for dinner.`;
+	} else {
+		return `${this.species} is a ${this.diet}. Time to suggest a potluck.`;
+	}
+};
 
 // Dino data (from dino.json provided in the starter code)
 const dinoData = [
@@ -91,10 +121,10 @@ const dinoData = [
 	},
 ];
 
-// Create Dino Objects
 console.log("dinoData", dinoData);
 
 function init() {
+	// Create Dino Objects
 	const dinoObjects = dinoData.map(
 		(dino) =>
 			new Dino(
@@ -132,41 +162,70 @@ function init() {
 	})();
 
 	console.log("human", human);
+	// Push human object in dinoObjects
+	dinoObjects.push(human);
 
+	// Generate Tiles for each Dino in Array
+	const tiles = dinoObjects.map((dino) => {
+		const documentFragment = document.createDocumentFragment();
+		const containerDiv = document.createElement("div");
+		containerDiv.className = "grid-item";
+
+		const img = document.createElement("img");
+		img.src = dino.image;
+
+		const title = document.createElement("h3");
+		const fact = document.createElement("p");
+
+		if (dino.species === "human") {
+			title.innerHTML = human.name;
+		} else if (dino.species === "Pigeon") {
+			title.innerHTML = dino.species;
+			fact.innerHTML = dino.fact;
+		} else {
+			title.innerHTML = dino.species;
+			fact.innerHTML = (_) => {
+				let result = "";
+				// Generate random number to choose fact from switch
+				const randomise = Math.floor(Math.random() * 7);
+
+				switch (randomise) {
+					case 1:
+						result = dino.compareHeight();
+						break;
+					case 2:
+						result = dino.compareWeight();
+						break;
+					case 3:
+						result = dino.compareDiet();
+						break;
+					case 4:
+						result = `The ${dino.species} lived in what is now ${dino.where}.`;
+						break;
+					case 5:
+						result = `The ${dino.species} was found in the ${dino.when}.`;
+						break;
+					default:
+						result = dino.fact;
+						break;
+				}
+				return result;
+			};
+		}
+		containerDiv.appendChild(title);
+		containerDiv.appendChild(img);
+		containerDiv.appendChild(fact);
+		documentFragment.appendChild(containerDiv);
+		
+		return documentFragment;
+	});
+
+	console.log("tiles", tiles)
+
+	// Add tiles to DOM
+
+	// Remove form from screen
 }
-
-// Create Dino Compare Method 1: Comparing weight
-// NOTE: Weight in JSON file is in lbs, height in inches.
-Dino.prototype.compareWeight = function(yourWeight){
-	const diff = this.weight - yourWeight;
-	return diff > 0 ? `${species} is ${diff} lbs heavier than you !!` : `${species} is ${-diff} lbs lighter than you !!`
-}
-
-// Create Dino Compare Method 2:  Comparing height
-Dino.prototype.compareHeight = function(yourHeight){
-	const diff = this.height - yourHeight;
-	return diff > 0 ? `${species} is ${diff} lbs longer than you !!` : `${species} is ${-diff} lbs shorter than you !!`
-}
-
-
-// Create Dino Compare Method 3 : Comparing diet
-Dino.prototype.compareDiet= function(yourDiet){
-	if (yourDiet === this.diet){
-		return `${this.species} is a ${this.diet}. You two can share your meal.`;
-	} else if (this.diet === "carnivor"){
-			return `${this.species} is a ${this.diet}. You can become its meal.`;
-	} else if (this.diet === "herbavor"){
-			return `${this.species} is a ${this.diet}. Find it some extra salad for dinner.`;
-	} else {
-			return `${this.species} is a ${this.diet}. Time to suggest a potluck.`;
-	}
-}
-
-// Generate Tiles for each Dino in Array
-
-// Add tiles to DOM
-
-// Remove form from screen
 
 // On button click, prepare and display infographic
 const submitBtn = document.querySelector("#btn");
